@@ -1,7 +1,8 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Ирина Ростовцева](https://up.htmlacademy.ru/javascript/17/user/786001).
-* Наставник: `Неизвестно`.
+* Наставник: [Евгений Щеколдин]
+(https://up.htmlacademy.ru/javascript/17/user/861059).
 
 ---
 
