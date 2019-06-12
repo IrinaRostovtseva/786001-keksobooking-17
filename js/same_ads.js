@@ -41,3 +41,17 @@ for (var i = 0; i < 8; i++) {
   };
   sameAds[i] = ad;
 }
+
+var createSameAdPin = function (arr) {
+  var pinElement = pinTemplate.cloneNode(true);
+  pinElement.style = 'left: ' + arr.location.x + 'px; top: ' + arr.location.y + 'px;';
+  pinElement.querySelector('img').src = arr.author.avatar;
+  pinElement.querySelector('img').alt = arr.offer.type;
+  return pinElement;
+};
+for (var j = 0; j < sameAds.length; j++) {
+  var pin = createSameAdPin(sameAds[j]);
+  fragment.appendChild(pin);
+}
+mapPinsBlock.appendChild(fragment);
+map.classList.remove('map--faded');
