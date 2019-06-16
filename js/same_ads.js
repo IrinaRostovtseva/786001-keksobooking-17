@@ -4,13 +4,43 @@ var map = document.querySelector('.map');
 var MAP_WIDTH = map.offsetWidth;
 var MAP_HEIGHT = map.offsetHeight;
 var mapPinsBlock = document.querySelector('.map__pins');
-var mapPin = document.querySelector('.map__pin');
+var mapPin = document.querySelector('.map__pin--main');
 var MAP_PIN_WIDTH = mapPin.offsetWidth;
 var MAP_PIN_HEIGHT = mapPin.offsetHeight;
+var adForm = document.querySelector('.ad-form');
+var inputField = document.querySelectorAll('input');
+var selectField = document.querySelectorAll('select');
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var fragment = document.createDocumentFragment();
 var sameAds = [];
 var accomodationTypes = ['palace', 'flat', 'house', 'bungalo'];
+
+// активация карты
+
+var setAtributeToElement = function (arr, atribut) {
+  for (var i = 0; i < arr.length; i++) {
+    arr[i].setAttribute('' + atribut, '' + atribut);
+  }
+  return arr;
+};
+var removeAtributeFromElement = function (arr, atribut) {
+  for (var i = 0; i < arr.length; i++) {
+    arr[i].removeAttribute('' + atribut);
+  }
+  return arr;
+};
+
+var activateMap = function () {
+  removeAtributeFromElement(inputField, 'disabled');
+  removeAtributeFromElement(selectField, 'disabled');
+  map.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
+};
+
+setAtributeToElement(inputField, 'disabled');
+setAtributeToElement(selectField, 'disabled');
+
+mapPin.addEventListener('click', activateMap);
 
 var getRandomNumber = function (maxRange) {
   var randomNumber = Math.floor(Math.random() * maxRange);
@@ -54,4 +84,3 @@ for (var j = 0; j < sameAds.length; j++) {
   fragment.appendChild(pin);
 }
 mapPinsBlock.appendChild(fragment);
-map.classList.remove('map--faded');
