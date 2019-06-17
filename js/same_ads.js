@@ -40,6 +40,7 @@ var activateMap = function () {
   removeAtributeFromElement(selectField, 'disabled');
   map.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
+  mapPinsBlock.appendChild(fragment);
 };
 
 addressField.value = mapPinXPosition + ',' + mapPinYPosition;
@@ -89,4 +90,3 @@ for (var j = 0; j < sameAds.length; j++) {
   var pin = createSameAdPin(sameAds[j]);
   fragment.appendChild(pin);
 }
-mapPinsBlock.appendChild(fragment);
