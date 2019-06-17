@@ -10,8 +10,13 @@ var MAP_PIN_HEIGHT = mapPin.offsetHeight;
 var adForm = document.querySelector('.ad-form');
 var inputField = document.querySelectorAll('input');
 var selectField = document.querySelectorAll('select');
+var addressField = adForm.querySelector('#address');
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var fragment = document.createDocumentFragment();
+
+var mapPinXPosition = mapPin.offsetLeft - (MAP_PIN_WIDTH * 0.5);
+var mapPinYPosition = mapPin.offsetTop + MAP_PIN_HEIGHT;
+
 var sameAds = [];
 var accomodationTypes = ['palace', 'flat', 'house', 'bungalo'];
 
@@ -37,6 +42,7 @@ var activateMap = function () {
   adForm.classList.remove('ad-form--disabled');
 };
 
+addressField.value = mapPinXPosition + ',' + mapPinYPosition;
 setAtributeToElement(inputField, 'disabled');
 setAtributeToElement(selectField, 'disabled');
 
