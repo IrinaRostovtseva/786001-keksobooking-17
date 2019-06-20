@@ -8,9 +8,13 @@ var mapPin = document.querySelector('.map__pin--main');
 var MAP_PIN_WIDTH = mapPin.offsetWidth;
 var MAP_PIN_HEIGHT = mapPin.offsetHeight;
 var adForm = document.querySelector('.ad-form');
-var inputField = document.querySelectorAll('input');
-var selectField = document.querySelectorAll('select');
+var inputFields = adForm.querySelectorAll('input');
+var selectFields = document.querySelectorAll('select');
 var addressField = adForm.querySelector('#address');
+var priceField = adForm.querySelector('#price');
+var typeField = adForm.querySelector('#type');
+var arriveField = adForm.querySelector('#timein');
+var departureField = adForm.querySelector('#timeout');
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var fragment = document.createDocumentFragment();
 
@@ -19,7 +23,7 @@ var mapPinYPosition = mapPin.offsetTop + MAP_PIN_HEIGHT;
 
 var sameAds = [];
 var accomodationTypes = ['palace', 'flat', 'house', 'bungalo'];
-
+var accommodationPrices = [10000, 1000, 5000, 0];
 // активация карты
 
 var setAtributeToElement = function (arr, atribut) {
@@ -36,16 +40,16 @@ var removeAtributeFromElement = function (arr, atribut) {
 };
 
 var activateMap = function () {
-  removeAtributeFromElement(inputField, 'disabled');
-  removeAtributeFromElement(selectField, 'disabled');
+  removeAtributeFromElement(inputFields, 'disabled');
+  removeAtributeFromElement(selectFields, 'disabled');
   map.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
   mapPinsBlock.appendChild(fragment);
 };
 
 addressField.value = mapPinXPosition + ',' + mapPinYPosition;
-setAtributeToElement(inputField, 'disabled');
-setAtributeToElement(selectField, 'disabled');
+setAtributeToElement(inputFields, 'disabled');
+setAtributeToElement(selectFields, 'disabled');
 
 mapPin.addEventListener('click', activateMap);
 
@@ -90,3 +94,34 @@ for (var j = 0; j < sameAds.length; j++) {
   var pin = createSameAdPin(sameAds[j]);
   fragment.appendChild(pin);
 }
+// заполнение формы объявления
+
+var onAccommodationTypeClick = function () {
+  var checkedType = typeField.querySelector('option:checked');
+  for (var k = 0; k < accomodationTypes.length; k++) {
+    if (checkedType.value === accomodationTypes[k]) {
+      priceField.min = accommodationPrices[k];
+      priceField.placeholder = '' + accommodationPrices[k];
+    }
+  }
+};
+
+var synchronizeTwoFields = function (field1, field2) {
+  var field1CheckedOption = field1.querySelector('option:checked');
+  var field2Options = field2.querySelectorAll('option');
+  for (var k = 0; k < field2Options.length; k++) {
+    field2Options[k].removeAttribute('selected');
+    if (field1CheckedOption.value === field2Options[k].value) {
+      field2Options[k].selected = true;
+    }
+  }
+};
+
+typeField.addEventListener('click', onAccommodationTypeClick);
+arriveField.addEventListener('click', function () {
+  synchronizeTwoFields(arriveField, departureField);
+});
+departureField.addEventListener('click', function () {
+  synchronizeTwoFields(departureField, arriveField);
+});
+
