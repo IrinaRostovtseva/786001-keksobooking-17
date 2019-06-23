@@ -18,9 +18,6 @@ var departureField = adForm.querySelector('#timeout');
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var fragment = document.createDocumentFragment();
 
-var mapPinXPosition = mapPin.offsetLeft - (MAP_PIN_WIDTH * 0.5);
-var mapPinYPosition = mapPin.offsetTop + MAP_PIN_HEIGHT;
-
 var sameAds = [];
 var accomodationTypes = ['palace', 'flat', 'house', 'bungalo'];
 var accommodationPrices = [10000, 1000, 5000, 0];
