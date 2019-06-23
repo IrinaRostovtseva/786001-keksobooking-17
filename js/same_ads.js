@@ -18,12 +18,10 @@ var departureField = adForm.querySelector('#timeout');
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var fragment = document.createDocumentFragment();
 
-var mapPinXPosition = mapPin.offsetLeft - (MAP_PIN_WIDTH * 0.5);
-var mapPinYPosition = mapPin.offsetTop + MAP_PIN_HEIGHT;
-
 var sameAds = [];
 var accomodationTypes = ['palace', 'flat', 'house', 'bungalo'];
 var accommodationPrices = [10000, 1000, 5000, 0];
+
 // активация карты
 
 var setAtributeToElement = function (arr, atribut) {
@@ -47,11 +45,9 @@ var activateMap = function () {
   mapPinsBlock.appendChild(fragment);
 };
 
-addressField.value = mapPinXPosition + ',' + mapPinYPosition;
 setAtributeToElement(inputFields, 'disabled');
 setAtributeToElement(selectFields, 'disabled');
 
-mapPin.addEventListener('click', activateMap);
 
 var getRandomNumber = function (maxRange) {
   var randomNumber = Math.floor(Math.random() * maxRange);
@@ -125,3 +121,30 @@ departureField.addEventListener('click', function () {
   synchronizeTwoFields(departureField, arriveField);
 });
 
+// Перетаскивание метки карты
+
+mapPin.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+
+  var pinPosition = {
+    x: evt.pageX - MAP_PIN_WIDTH * 0.5 - map.offsetLeft,
+    y: compareNumberWithLimits(evt.pageY - MAP_PIN_HEIGHT, 130, 630)
+  };
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    pinPosition = {
+      x: moveEvt.pageX - MAP_PIN_WIDTH * 0.5 - map.offsetLeft,
+      y: compareNumberWithLimits(moveEvt.pageY - MAP_PIN_HEIGHT, 130, 630)
+    };
+    activateMap();
+    mapPin.style = 'top: ' + pinPosition.y + 'px;' + 'left: ' + pinPosition.x + 'px;';
+    addressField.value = pinPosition.x + ',' + pinPosition.y;
+  };
+  var onMouseUp = function () {
+    map.removeEventListener('mousemove', onMouseMove);
+    map.removeEventListener('mouseup', onMouseUp);
+  };
+  map.addEventListener('mousemove', onMouseMove);
+  map.addEventListener('mouseup', onMouseUp);
+});
