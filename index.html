@@ -38,43 +38,43 @@
       <!-- Фильтрация объявлений -->
       <div class="map__filters-container">
         <form action="#" class="map__filters" autocomplete="off">
-          <select name="housing-type" id="housing-type" class="map__filter">
+          <select name="housing-type" id="housing-type" class="map__filter" disabled>
             <option value="any" selected>Любой тип жилья</option>
             <option value="palace">Дворец</option>
             <option value="flat">Квартира</option>
             <option value="house">Дом</option>
             <option value="bungalo">Бунгало</option>
           </select>
-          <select name="housing-price" id="housing-price" class="map__filter">
+          <select name="housing-price" id="housing-price" class="map__filter" disabled>
             <option value="any" selected>Любая</option>
             <option value="middle">10000 - 50000&#x20bd;</option>
             <option value="low">до 10000&#x20bd;</option>
             <option value="high">от 50000&#x20bd;</option>
           </select>
-          <select name="housing-rooms" id="housing-rooms" class="map__filter">
+          <select name="housing-rooms" id="housing-rooms" class="map__filter" disabled>
             <option value="any" selected>Любое число комнат</option>
             <option value="1">Одна комната</option>
             <option value="2">Две комнаты</option>
             <option value="3">Три комнаты</option>
           </select>
-          <select name="housing-guests" id="housing-guests" class="map__filter">
+          <select name="housing-guests" id="housing-guests" class="map__filter" disabled>
             <option value="any" selected>Любое число гостей</option>
             <option value="2">Два гостя</option>
             <option value="1">Один гость</option>
             <option value="0">Не для гостей</option>
           </select>
           <fieldset id="housing-features" class="map__features">
-            <input type="checkbox" name="features" value="wifi" id="filter-wifi" class="map__checkbox visually-hidden">
+            <input type="checkbox" name="features" value="wifi" id="filter-wifi" class="map__checkbox visually-hidden" disabled>
             <label class="map__feature map__feature--wifi" for="filter-wifi">Wi-Fi</label>
-            <input type="checkbox" name="features" value="dishwasher" id="filter-dishwasher" class="map__checkbox visually-hidden">
+            <input type="checkbox" name="features" value="dishwasher" id="filter-dishwasher" class="map__checkbox visually-hidden" disabled>
             <label class="map__feature map__feature--dishwasher" for="filter-dishwasher">Посудомоечная машина</label>
-            <input type="checkbox" name="features" value="parking" id="filter-parking" class="map__checkbox visually-hidden">
+            <input type="checkbox" name="features" value="parking" id="filter-parking" class="map__checkbox visually-hidden" disabled>
             <label class="map__feature map__feature--parking" for="filter-parking">Парковка</label>
-            <input type="checkbox" name="features" value="washer" id="filter-washer" class="map__checkbox visually-hidden">
+            <input type="checkbox" name="features" value="washer" id="filter-washer" class="map__checkbox visually-hidden" disabled>
             <label class="map__feature map__feature--washer" for="filter-washer">Стиральная машина</label>
-            <input type="checkbox" name="features" value="elevator" id="filter-elevator" class="map__checkbox visually-hidden">
+            <input type="checkbox" name="features" value="elevator" id="filter-elevator" class="map__checkbox visually-hidden" disabled>
             <label class="map__feature map__feature--elevator" for="filter-elevator">Лифт</label>
-            <input type="checkbox" name="features" value="conditioner" id="filter-conditioner" class="map__checkbox visually-hidden">
+            <input type="checkbox" name="features" value="conditioner" id="filter-conditioner" class="map__checkbox visually-hidden" disabled>
             <label class="map__feature map__feature--conditioner" for="filter-conditioner">Кондиционер</label>
            </fieldset>
         </form>
@@ -100,15 +100,15 @@
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide">
           <label class="ad-form__label" for="title">Заголовок объявления</label>
-          <input id="title" name="title" type="text" placeholder="Милая, уютная квартирка в центре Токио" minlength="30" maxlength="100" required>
+          <input id="title" name="title" type="text" placeholder="Милая, уютная квартирка в центре Токио" minlength="30" maxlength="100" required disabled>
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide">
           <label class="ad-form__label" for="address">Адрес</label>
-          <input id="address" name="address" type="text" readonly>
+          <input id="address" name="address" type="text" readonly disabled>
         </fieldset>
         <fieldset class="ad-form__element">
           <label class="ad-form__label" for="type">Тип жилья</label>
-          <select id="type" name="type">
+          <select id="type" name="type" disabled>
             <option value="bungalo">Бунгало</option>
             <option value="flat" selected>Квартира</option>
             <option value="house">Дом</option>
@@ -117,16 +117,16 @@
         </fieldset>
         <fieldset class="ad-form__element">
           <label class="ad-form__label" for="price">Цена за ночь, руб.</label>
-          <input id="price" name="price" type="number" placeholder="1000" max="1000000" required>
+          <input id="price" name="price" type="number" placeholder="1000" max="1000000" required disabled>
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--time">
           <label class="ad-form__label" for="timein">Время заезда и выезда</label>
-          <select id="timein" name="timein">
+          <select id="timein" name="timein" disabled>
             <option value="12:00" selected>После 12</option>
             <option value="13:00">После 13</option>
             <option value="14:00">После 14</option>
           </select>
-          <select id="timeout" name="timeout" title="Time to go out">
+          <select id="timeout" name="timeout" title="Time to go out" disabled>
             <option value="12:00" selected>Выезд до 12</option>
             <option value="13:00">Выезд до 13</option>
             <option value="14:00">Выезд до 14</option>
@@ -134,7 +134,7 @@
         </fieldset>
         <fieldset class="ad-form__element">
           <label class="ad-form__label" for="room_number">Кол-во комнат</label>
-          <select id="room_number" name="rooms">
+          <select id="room_number" name="rooms" disabled>
             <option value="1" selected>1 комната</option>
             <option value="2">2 комнаты</option>
             <option value="3">3 комнаты</option>
@@ -143,7 +143,7 @@
         </fieldset>
         <fieldset class="ad-form__element">
           <label class="ad-form__label" for="capacity">Количество мест</label>
-          <select id="capacity" name="capacity">
+          <select id="capacity" name="capacity" disabled>
             <option value="3" selected>для 3 гостей</option>
             <option value="2">для 2 гостей</option>
             <option value="1">для 1 гостя</option>
@@ -152,17 +152,17 @@
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide features">
           <legend>Удобства: Wi-Fi, кухня, парковка, стиралка, лифт, кондиционер</legend>
-          <input type="checkbox" name="features" value="wifi" id="feature-wifi" class="feature__checkbox visually-hidden">
+          <input type="checkbox" name="features" value="wifi" id="feature-wifi" class="feature__checkbox visually-hidden" disabled>
           <label class="feature feature--wifi" for="feature-wifi">Wi-Fi</label>
-          <input type="checkbox" name="features" value="dishwasher" id="feature-dishwasher" class="feature__checkbox visually-hidden">
+          <input type="checkbox" name="features" value="dishwasher" id="feature-dishwasher" class="feature__checkbox visually-hidden" disabled>
           <label class="feature feature--dishwasher" for="feature-dishwasher">Посудомоечная машина</label>
-          <input type="checkbox" name="features" value="parking" id="feature-parking" class="feature__checkbox visually-hidden">
+          <input type="checkbox" name="features" value="parking" id="feature-parking" class="feature__checkbox visually-hidden" disabled>
           <label class="feature feature--parking" for="feature-parking">Парковка</label>
-          <input type="checkbox" name="features" value="washer" id="feature-washer" class="feature__checkbox visually-hidden">
+          <input type="checkbox" name="features" value="washer" id="feature-washer" class="feature__checkbox visually-hidden" disabled>
           <label class="feature feature--washer" for="feature-washer">Стиральная машина</label>
-          <input type="checkbox" name="features" value="elevator" id="feature-elevator" class="feature__checkbox visually-hidden">
+          <input type="checkbox" name="features" value="elevator" id="feature-elevator" class="feature__checkbox visually-hidden" disabled>
           <label class="feature feature--elevator" for="feature-elevator">Лифт</label>
-          <input type="checkbox" name="features" value="conditioner" id="feature-conditioner" class="feature__checkbox visually-hidden">
+          <input type="checkbox" name="features" value="conditioner" id="feature-conditioner" class="feature__checkbox visually-hidden" disabled>
           <label class="feature feature--conditioner" for="feature-conditioner">Кондиционер</label>
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide">
@@ -173,7 +173,7 @@
           <label class="ad-form__label">Фотографии жилья</label>
           <div class="ad-form__photo-container">
             <div class="ad-form__upload">
-              <input type="file" id="images" name="images" class="ad-form__input visually-hidden">
+              <input type="file" id="images" name="images" class="ad-form__input visually-hidden" disabled>
               <label for="images" class="ad-form__drop-zone">Загрузите или&nbsp;перетащите сюда фото</label>
             </div>
             <div class="ad-form__photo"></div>
@@ -247,6 +247,9 @@
       <button class="error__button" href="#">Попробовать снова</button>
     </div>
   </template>
+  <script src="js/utils.js"></script>
+  <script src="js/pin_drag.js"></script>
+  <script src="js/form.js"></script>
   <script src="js/same_ads.js"></script>
 </body>
 </html>
