@@ -19,7 +19,7 @@ window.utils = (function () {
         var element = elemTemplate.cloneNode(true);
         element.style = 'left: ' + arr[i].location.x + 'px; top: ' + arr[i].location.y + 'px;';
         element.querySelector('img').src = arr[i].author.avatar;
-        element.querySelector('img').alt = arr[i].offer.type;
+        element.querySelector('img').alt = arr[i].offer.title;
         fragment.appendChild(element);
       }
     },
