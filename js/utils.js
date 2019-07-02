@@ -15,8 +15,9 @@ window.utils = (function () {
       return n;
     },
     createPin: function (arr, fragment) {
+      var pin = document.querySelector('#pin').content.querySelector('.map__pin');
       arr.forEach(function (it) {
-        var element = document.querySelector('#pin').content.querySelector('.map__pin').cloneNode(true);
+        var element = pin.cloneNode(true);
         element.style = 'left: ' + it.location.x + 'px; top: ' + it.location.y + 'px;';
         element.querySelector('img').src = it.author.avatar;
         element.querySelector('img').alt = it.offer.title;
@@ -45,9 +46,10 @@ window.utils = (function () {
         }
       }
     },
-    createErrorMessage: function (error, blockMain, request) {
+    createErrorMessage: function (error, request) {
       var errorMessage = document.querySelector('#error').content.querySelector('.error').cloneNode(true);
       var errorButton = errorMessage.querySelector('.error__button');
+      var blockMain = document.querySelector('main');
       errorMessage.querySelector('.error__message').textContent = error;
       blockMain.appendChild(errorMessage);
       errorButton.addEventListener('click', function (evt) {
@@ -57,7 +59,7 @@ window.utils = (function () {
       });
     },
     onError: function (error) {
-      window.utils.createErrorMessage(error, document.querySelector('main'), window.recieveData(window.utils.onSuccess, window.utils.onError));
+      window.utils.createErrorMessage(error, window.recieveData(window.utils.onSuccess, window.utils.onError));
     },
     onFilterTypeClick: function (data, max) {
       var checked = document.querySelector('#housing-type option:checked');

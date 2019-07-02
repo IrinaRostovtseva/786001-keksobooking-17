@@ -8,11 +8,11 @@
 
   var onSuccess = function (data) {
     accommodationTypeFilter.addEventListener('click', function () {
-      var pin = mapPinsBlock.querySelector('.map__pin:not(.map__pin--main)');
-      while (pin) {
-        mapPinsBlock.removeChild(pin);
-        pin = mapPinsBlock.querySelector('.map__pin:not(.map__pin--main)');
-      }
+      var pins = mapPinsBlock.querySelectorAll('.map__pin:not(.map__pin--main)');
+      pins.forEach(function (it) {
+        it.remove();
+      });
+
       window.utils.onFilterTypeClick(data, ADS_MAX_AMOUNT);
       mapPinsBlock.appendChild(window.fragment);
     });
