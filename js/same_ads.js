@@ -1,26 +1,22 @@
 'use strict';
 
 (function () {
-  var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
-  var errorTemplate = document.querySelector('#error').content.querySelector('.error');
-  var mainBlock = document.querySelector('main');
   window.fragment = document.createDocumentFragment();
-
-  var URL = 'https://js.dump.academy/keksobooking/data';
+  var accommodationTypeFilter = document.querySelector('#housing-type');
+  var mapPinsBlock = document.querySelector('.map__pins');
+  var ADS_MAX_AMOUNT = 5;
 
   var onSuccess = function (data) {
-    var sameAds = data;
-    window.utils.createSameElement(sameAds, pinTemplate, window.fragment);
-  };
-  var onError = function (error) {
-    var errorMessage = errorTemplate.cloneNode(true);
-    errorMessage.querySelector('.error__message').textContent = error;
-    mainBlock.appendChild(errorMessage);
-    errorMessage.querySelector('.error__button').addEventListener('click', function (evt) {
-      evt.preventDefault();
-      mainBlock.removeChild(errorMessage);
-      window.recieveData(URL, onSuccess, onError);
+    accommodationTypeFilter.addEventListener('click', function () {
+      var pins = mapPinsBlock.querySelectorAll('.map__pin:not(.map__pin--main)');
+      pins.forEach(function (it) {
+        it.remove();
+      });
+
+      window.utils.onFilterTypeClick(data, ADS_MAX_AMOUNT);
+      mapPinsBlock.appendChild(window.fragment);
     });
   };
-  window.recieveData(URL, onSuccess, onError);
+
+  window.recieveData(onSuccess, window.utils.onError);
 })();
