@@ -26,6 +26,9 @@ window.utils = (function () {
         element.querySelector('img').src = it.author.avatar;
         element.querySelector('img').alt = it.offer.title;
         fragment.appendChild(element);
+        element.addEventListener('click', function () {
+          window.utils.onPinClick(it);
+        });
         return fragment;
       });
     },
@@ -36,9 +39,16 @@ window.utils = (function () {
       return arr;
     },
     activateMap: function (map, form, mapClassName, formClassName, formElem) {
+      var mapPinsBlock = document.querySelector('.map__pins');
       window.utils.removeAtributeFromElement(formElem, 'disabled');
       map.classList.remove(mapClassName);
       form.classList.remove(formClassName);
+      var onSuccess = function (data) {
+        window.utils.createPin(data.slice(0, 5), window.fragment);
+        mapPinsBlock.appendChild(window.fragment);
+        window.utils.createAdCard(data[0]);
+      };
+      window.recieveData(onSuccess, window.utils.onError);
     },
     synchronizeTwoFields: function (field1, field2) {
       var field1CheckedOption = field1.querySelector('option:checked');
@@ -81,20 +91,38 @@ window.utils = (function () {
       if (adInfoCard) {
         map.removeChild(adInfoCard);
       }
-      window.utils.createAdCard(ads[0], window.fragment);
+      window.utils.createAdCard(ads[0]);
     },
     createAdCard: function (adData) {
+      var ClassToAdFeature = {
+        'popup__feature--wifi': 'wifi',
+        'popup__feature--dishwasher': 'dishwasher',
+        'popup__feature--parking': 'parking',
+        'popup__feature--washer': 'washer',
+        'popup__feature--elevator': 'elevator',
+        'popup__feature--conditioner': 'conditioner'
+      };
       var map = document.querySelector('.map');
       var filtersBlock = map.querySelector('.map__filters-container');
       var cardTemplate = document.querySelector('#card').content.querySelector('.popup');
+      if (adData === undefined) {
+        return;
+      }
       var card = cardTemplate.cloneNode(true);
       card.querySelector('.popup__title').textContent = adData.offer.title;
       card.querySelector('.popup__text--address').textContent = adData.offer.address;
       card.querySelector('.popup__text--price').textContent = adData.offer.price + ' ₽/ночь';
-      card.querySelector('.popup__type').textContent = adData.type;
+      card.querySelector('.popup__type').textContent = adData.offer.type;
       card.querySelector('.popup__text--capacity').textContent = adData.offer.rooms + ' комнаты для ' + adData.offer.guests + ' гостей';
       card.querySelector('.popup__text--time').textContent = 'Заезд после ' + adData.offer.checkin + ', выезд до ' + adData.offer.checkout;
-      card.querySelector('.popup__features').textContent = adData.features;
+      var featureList = card.querySelectorAll('.popup__feature');
+      featureList.forEach(function (it) {
+        var liClass = it.classList.item(1);
+        var feature = ClassToAdFeature[liClass];
+        if (!adData.offer.features.includes(feature)) {
+          it.remove();
+        }
+      });
       card.querySelector('.popup__description').textContent = adData.offer.description;
       var adPhotos = card.querySelector('.popup__photos');
       var photo = adPhotos.querySelector('.popup__photo');
@@ -109,13 +137,27 @@ window.utils = (function () {
       window.utils.closePopup();
     },
     closePopup: function () {
-      var map = document.querySelector('.map');
-      var adCard = map.querySelector('.map__card');
-      var popupCloseButton = map.querySelector('.popup__close');
+      var adCard = document.querySelector('.map__card');
+      var popupCloseButton = adCard.querySelector('.popup__close');
+      var KEY_CODE_ESC = 27;
       popupCloseButton.addEventListener('click', function (evt) {
         evt.preventDefault();
-        map.removeChild(adCard);
+        adCard.remove();
       });
+      window.addEventListener('keydown', function (evt) {
+        evt.preventDefault();
+        if (evt.keyCode === KEY_CODE_ESC) {
+          adCard.remove();
+        }
+      });
+    },
+    onPinClick: function (data) {
+      var map = document.querySelector('.map');
+      var adInfoCard = map.querySelector('.map__card');
+      if (adInfoCard) {
+        map.removeChild(adInfoCard);
+      }
+      window.utils.createAdCard(data);
     }
   };
 })();
