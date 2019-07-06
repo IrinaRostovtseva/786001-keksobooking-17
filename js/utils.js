@@ -69,7 +69,7 @@ window.utils = (function () {
       var messageTemplate = document.querySelector('#success').content.querySelector('.success');
       var main = document.querySelector('main');
       var message = messageTemplate.cloneNode(true);
-      main.appendChild(message);      
+      main.appendChild(message);
     },
     onError: function (error) {
       window.utils.createErrorMessage(error, window.recieveData(window.utils.onSuccess, window.utils.onError));

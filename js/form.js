@@ -38,7 +38,7 @@
       var abledGuestFields = capacityFields.filter(function (it) {
         return it.value <= RoomsToGuests[checkedRoomsValue] && it.value > 0;
       });
-      if (checkedRoomsValue == 100) {
+      if (checkedRoomsValue === '100') {
         abledGuestFields = capacityFields.filter(function (it) {
           return it.value === RoomsToGuests[checkedRoomsValue];
         });
@@ -56,6 +56,6 @@
   });
   rooms.addEventListener('click', onRoomsFieldClick);
   adForm.addEventListener('submit', function () {
-      window.utils.createSuccessMessage();
+    window.utils.createSuccessMessage();
   });
 })();

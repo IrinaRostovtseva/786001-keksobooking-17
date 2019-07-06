@@ -23,7 +23,7 @@
     window.utils.createPin(slicedData, window.fragment);
     mapPinsBlock.appendChild(window.fragment);
   };
-  
+
   mapPin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
     var pinPosition = new MapPinCoordinate(evt.pageX - MAP_PIN_WIDTH * 0.5 - map.offsetLeft, window.utils.compareNumberWithLimits(evt.pageY - MAP_PIN_HEIGHT, Limit.TOP, Limit.BOTTOM));
@@ -38,7 +38,7 @@
       mapPin.style = 'top: ' + pinPosition.y + 'px;' + 'left: ' + pinPosition.x + 'px;';
       addressField.value = pinPosition.x + ',' + pinPosition.y;
     };
-    
+
     var onMouseUp = function () {
       mapPin.style = 'top: ' + pinPosition.y + 'px;' + 'left: ' + pinPosition.x + 'px;';
       addressField.value = pinPosition.x + ',' + pinPosition.y;
