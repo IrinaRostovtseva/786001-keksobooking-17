@@ -39,16 +39,9 @@ window.utils = (function () {
       return arr;
     },
     activateMap: function (map, form, mapClassName, formClassName, formElem) {
-      var mapPinsBlock = document.querySelector('.map__pins');
       window.utils.removeAtributeFromElement(formElem, 'disabled');
       map.classList.remove(mapClassName);
       form.classList.remove(formClassName);
-      var onSuccess = function (data) {
-        window.utils.createPin(data.slice(0, 5), window.fragment);
-        mapPinsBlock.appendChild(window.fragment);
-        window.utils.createAdCard(data[0]);
-      };
-      window.recieveData(onSuccess, window.utils.onError);
     },
     synchronizeTwoFields: function (field1, field2) {
       var field1CheckedOption = field1.querySelector('option:checked');
@@ -71,6 +64,12 @@ window.utils = (function () {
         blockMain.removeChild(errorMessage);
         request();
       });
+    },
+    createSuccessMessage: function () {
+      var messageTemplate = document.querySelector('#success').content.querySelector('.success');
+      var main = document.querySelector('main');
+      var message = messageTemplate.cloneNode(true);
+      main.appendChild(message);      
     },
     onError: function (error) {
       window.utils.createErrorMessage(error, window.recieveData(window.utils.onSuccess, window.utils.onError));
