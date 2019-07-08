@@ -1,7 +1,11 @@
 'use strict';
 
 (function () {
+  var map = document.querySelector('.map');
+  var mapPin = map.querySelector('.map__pin');
   var adForm = document.querySelector('.ad-form');
+  var allInputsAndSelects = document.querySelectorAll('input, select');
+  var addressField = adForm.querySelector('#address');
   var priceField = adForm.querySelector('#price');
   var typeField = adForm.querySelector('#type');
   var arriveField = adForm.querySelector('#timein');
@@ -17,6 +21,18 @@
     3: '3',
     100: '0'
   };
+
+  var PinSize = {
+    PIN_WIDTH: document.querySelector('.map__pin--main').offsetWidth,
+    PIN_HEIGHT: document.querySelector('.map__pin--main').offsetHeight
+  };
+
+  var PinInitialPosition = {
+    PIN_Y: document.querySelector('.map__pin--main').offsetTop,
+    PIN_X: document.querySelector('.map__pin--main').offsetLeft
+  };
+
+  addressField.value = (PinInitialPosition.PIN_X - (PinSize.PIN_WIDTH * 0.5)) + ',' + (PinInitialPosition.PIN_Y - PinSize.PIN_HEIGHT);
 
   var onAccommodationTypeClick = function () {
     var checkedType = typeField.querySelector('option:checked');
@@ -51,11 +67,30 @@
   arriveField.addEventListener('click', function () {
     window.utils.synchronizeTwoFields(arriveField, departureField);
   });
+
+  var onSuccess = function () {
+    var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    var card = document.querySelector('.map__card');
+    if (card) {
+      card.remove();
+    }
+    window.utils.createSuccessMessage();
+    addressField.value = PinInitialPosition.PIN_X + ',' + PinInitialPosition.PIN_Y;
+    window.utils.deactivateMap(map, adForm, 'map--faded', 'ad-form--disabled', allInputsAndSelects);
+    pins.forEach(function (it) {
+      it.remove();
+    });
+    mapPin.style = 'top: ' + PinInitialPosition.PIN_Y + 'px;' + 'left: ' + PinInitialPosition.PIN_X + 'px;';
+  };
+
   departureField.addEventListener('click', function () {
     window.utils.synchronizeTwoFields(departureField, arriveField);
   });
+
   rooms.addEventListener('click', onRoomsFieldClick);
-  adForm.addEventListener('submit', function () {
-    window.utils.createSuccessMessage();
+
+  adForm.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    window.sendData(onSuccess, window.utils.onError);
   });
 })();
