@@ -1,6 +1,12 @@
 'use strict';
 
 window.utils = (function () {
+  var KEY_CODE_ESC = 27;
+  var Limit = {
+    TOP: 130,
+    BOTTOM: 630
+  };
+
   return {
     getRandomNumber: function (maxRange) {
       var randomNumber = Math.floor(Math.random() * maxRange);
@@ -16,10 +22,6 @@ window.utils = (function () {
     },
     createPin: function (arr, fragment) {
       var pin = document.querySelector('#pin').content.querySelector('.map__pin');
-      var Limit = {
-        TOP: 130,
-        BOTTOM: 630
-      };
       arr.forEach(function (it) {
         var element = pin.cloneNode(true);
         element.style = 'left: ' + it.location.x + 'px; top: ' + window.utils.compareNumberWithLimits(it.location.y, Limit.TOP, Limit.BOTTOM) + 'px;';
@@ -43,6 +45,14 @@ window.utils = (function () {
       map.classList.remove(mapClassName);
       form.classList.remove(formClassName);
     },
+    deactivateMap: function (map, form, mapClassName, formClassName, formElem) {
+      map.classList.add(mapClassName);
+      form.reset();
+      form.classList.add(formClassName);
+      formElem.forEach(function (it) {
+        it.setAttribute('disabled', 'disabled');
+      });
+    },
     synchronizeTwoFields: function (field1, field2) {
       var field1CheckedOption = field1.querySelector('option:checked');
       var field2Options = field2.querySelectorAll('option');
@@ -53,7 +63,7 @@ window.utils = (function () {
         }
       }
     },
-    createErrorMessage: function (error, request) {
+    createErrorMessage: function (error) {
       var errorMessage = document.querySelector('#error').content.querySelector('.error').cloneNode(true);
       var errorButton = errorMessage.querySelector('.error__button');
       var blockMain = document.querySelector('main');
@@ -61,18 +71,19 @@ window.utils = (function () {
       blockMain.appendChild(errorMessage);
       errorButton.addEventListener('click', function (evt) {
         evt.preventDefault();
-        blockMain.removeChild(errorMessage);
-        request();
+        errorMessage.remove();
       });
+      window.utils.closeMessage(errorMessage);
     },
     createSuccessMessage: function () {
       var messageTemplate = document.querySelector('#success').content.querySelector('.success');
       var main = document.querySelector('main');
       var message = messageTemplate.cloneNode(true);
       main.appendChild(message);
+      window.utils.closeMessage(message);
     },
     onError: function (error) {
-      window.utils.createErrorMessage(error, window.recieveData(window.utils.onSuccess, window.utils.onError));
+      window.utils.createErrorMessage(error);
     },
     onFilterTypeClick: function (data, max) {
       var checked = document.querySelector('#housing-type option:checked');
@@ -108,6 +119,7 @@ window.utils = (function () {
         return;
       }
       var card = cardTemplate.cloneNode(true);
+      var popupCloseButton = card.querySelector('.popup__close');
       card.querySelector('.popup__title').textContent = adData.offer.title;
       card.querySelector('.popup__text--address').textContent = adData.offer.address;
       card.querySelector('.popup__text--price').textContent = adData.offer.price + ' ₽/ночь';
@@ -115,6 +127,7 @@ window.utils = (function () {
       card.querySelector('.popup__text--capacity').textContent = adData.offer.rooms + ' комнаты для ' + adData.offer.guests + ' гостей';
       card.querySelector('.popup__text--time').textContent = 'Заезд после ' + adData.offer.checkin + ', выезд до ' + adData.offer.checkout;
       var featureList = card.querySelectorAll('.popup__feature');
+
       featureList.forEach(function (it) {
         var liClass = it.classList.item(1);
         var feature = ClassToAdFeature[liClass];
@@ -133,22 +146,16 @@ window.utils = (function () {
       });
       card.querySelector('.popup__avatar').src = adData.author.avatar;
       map.insertBefore(card, filtersBlock);
-      window.utils.closePopup();
+      window.utils.closePopup(card, popupCloseButton);
     },
-    closePopup: function () {
-      var adCard = document.querySelector('.map__card');
-      var popupCloseButton = adCard.querySelector('.popup__close');
-      var KEY_CODE_ESC = 27;
-      popupCloseButton.addEventListener('click', function (evt) {
+    closePopup: function (popup, button) {
+      button.addEventListener('click', function (evt) {
         evt.preventDefault();
-        adCard.remove();
+        popup.remove();
       });
       window.addEventListener('keydown', function (evt) {
-        evt.preventDefault();
-        if (evt.keyCode === KEY_CODE_ESC) {
-          adCard.remove();
-        }
-      });
+        window.utils.onEscPress(evt, popup);
+      }, {once: true});
     },
     onPinClick: function (data) {
       var map = document.querySelector('.map');
@@ -157,6 +164,20 @@ window.utils = (function () {
         map.removeChild(adInfoCard);
       }
       window.utils.createAdCard(data);
+    },
+    onEscPress: function (evt, elem) {
+      evt.preventDefault();
+      if (evt.keyCode === KEY_CODE_ESC) {
+        elem.remove();
+      }
+    },
+    closeMessage: function (elem) {
+      window.addEventListener('keydown', function (evt) {
+        window.utils.onEscPress(evt, elem);
+      }, {once: true});
+      window.addEventListener('click', function () {
+        elem.remove();
+      });
     }
   };
 })();
