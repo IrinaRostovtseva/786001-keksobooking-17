@@ -30,6 +30,7 @@ window.utils = (function () {
         fragment.appendChild(element);
         element.addEventListener('click', function () {
           window.utils.onPinClick(it);
+          element.classList.add('map__pin--active');
         });
         return fragment;
       });
@@ -40,17 +41,31 @@ window.utils = (function () {
       }
       return arr;
     },
-    activateMap: function (map, form, mapClassName, formClassName, formElem) {
-      window.utils.removeAtributeFromElement(formElem, 'disabled');
-      map.classList.remove(mapClassName);
-      form.classList.remove(formClassName);
+    activateMap: function () {
+      var map = document.querySelector('.map');
+      var adForm = document.querySelector('.ad-form');
+      var allInputsAndSelects = document.querySelectorAll('input, select');
+      window.utils.removeAtributeFromElement(allInputsAndSelects, 'disabled');
+      map.classList.remove('map--faded');
+      adForm.classList.remove('ad-form--disabled');
     },
-    deactivateMap: function (map, form, mapClassName, formClassName, formElem) {
-      map.classList.add(mapClassName);
-      form.reset();
-      form.classList.add(formClassName);
-      formElem.forEach(function (it) {
+    deactivateMap: function () {
+      var map = document.querySelector('.map');
+      var adForm = document.querySelector('.ad-form');
+      var allInputsAndSelects = document.querySelectorAll('input, select');
+      var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+      var card = document.querySelector('.map__card');
+      if (card) {
+        card.remove();
+      }
+      map.classList.add('map--faded');
+      adForm.reset();
+      adForm.classList.add('ad-form--disabled');
+      allInputsAndSelects.forEach(function (it) {
         it.setAttribute('disabled', 'disabled');
+      });
+      pins.forEach(function (it) {
+        it.remove();
       });
     },
     synchronizeTwoFields: function (field1, field2) {
@@ -85,18 +100,63 @@ window.utils = (function () {
     onError: function (error) {
       window.utils.createErrorMessage(error);
     },
-    onFilterTypeClick: function (data, max) {
-      var checked = document.querySelector('#housing-type option:checked');
+    onFilterClick: function (data, max) {
+      var PriceBreakPoint = {
+        BOTTOM: 10000,
+        TOP: 50000
+      };
+      var checkedType = document.querySelector('#housing-type option:checked');
+      var checkedPrice = document.querySelector('#housing-price option:checked');
+      var checkedRoom = document.querySelector('#housing-rooms option:checked');
+      var checkedGuest = document.querySelector('#housing-guests option:checked');
+      var checkedFeatures = Array.from(document.querySelectorAll('.map__checkbox:checked'));
       var ads;
       var map = document.querySelector('.map');
       var adInfoCard = map.querySelector('.map__card');
-      if (checked.value !== 'any') {
-        ads = data.filter(function (it) {
-          return checked.value === it.offer.type;
-        }).slice(0, max);
-      } else {
-        ads = data.slice(0, max);
-      }
+
+      ads = data.filter(function (it) {
+        if (checkedType.value !== 'any') {
+          return checkedType.value === it.offer.type;
+        } else {
+          return it;
+        }
+      })
+      .filter(function (it) {
+        if (checkedPrice.value === 'low') {
+          return it.offer.price < PriceBreakPoint.BOTTOM;
+        } else if (checkedPrice.value === 'middle') {
+          return it.offer.price >= PriceBreakPoint.BOTTOM && it.offer.price <= PriceBreakPoint.TOP;
+        } else if (checkedPrice.value === 'high') {
+          return it.offer.price > PriceBreakPoint.TOP;
+        }
+        return it;
+      })
+      .filter(function (it) {
+        if (checkedRoom.value !== 'any') {
+          return +checkedRoom.value === it.offer.rooms;
+        } else {
+          return it;
+        }
+      })
+      .filter(function (it) {
+        if (checkedGuest.value !== 'any') {
+          return +checkedGuest.value === it.offer.guests;
+        } else {
+          return it;
+        }
+      })
+      .filter(function (it) {
+        for (var i = 0; i < checkedFeatures.length; i++) {
+          if (it.offer.features.includes(checkedFeatures[i].value)) {
+            return it;
+          }
+        }
+        if (checkedFeatures.length === 0) {
+          return it;
+        }
+        return undefined;
+      })
+      .slice(0, max);
       window.utils.createPin(ads, window.fragment);
       if (adInfoCard) {
         map.removeChild(adInfoCard);
@@ -160,9 +220,13 @@ window.utils = (function () {
     onPinClick: function (data) {
       var map = document.querySelector('.map');
       var adInfoCard = map.querySelector('.map__card');
+      var pins = map.querySelectorAll('.map__pin:not(.map__pin--main)');
       if (adInfoCard) {
         map.removeChild(adInfoCard);
       }
+      pins.forEach(function (it) {
+        it.classList.remove('map__pin--active');
+      });
       window.utils.createAdCard(data);
     },
     onEscPress: function (evt, elem) {
