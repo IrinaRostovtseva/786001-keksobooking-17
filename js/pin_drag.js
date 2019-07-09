@@ -4,7 +4,6 @@
   var map = document.querySelector('.map');
   var mapPin = map.querySelector('.map__pin--main');
   var mapPinsBlock = map.querySelector('.map__pins');
-  var inputsAndSelects = document.querySelectorAll('input, select');
   var adForm = document.querySelector('.ad-form');
   var addressField = adForm.querySelector('#address');
   var MapPinCoordinate = function (x, y) {
@@ -33,18 +32,18 @@
       moveEvt.preventDefault();
       pinPosition = new MapPinCoordinate(moveEvt.pageX - PinSize.PIN_WIDTH * 0.5 - map.offsetLeft, window.utils.compareNumberWithLimits(moveEvt.pageY - PinSize.PIN_HEIGHT, Limit.TOP, Limit.BOTTOM));
       if (map.classList.contains('map--faded')) {
-        window.utils.activateMap(map, adForm, 'map--faded', 'ad-form--disabled', inputsAndSelects);
+        window.utils.activateMap();
         window.recieveData(onSuccess, window.utils.onError);
       }
       mapPin.style = 'top: ' + pinPosition.y + 'px;' + 'left: ' + pinPosition.x + 'px;';
-      addressField.value = pinPosition.x + ',' + pinPosition.y;
+      addressField.value = pinPosition.x + ', ' + pinPosition.y;
     };
 
     var onMouseUp = function () {
       mapPin.style = 'top: ' + pinPosition.y + 'px;' + 'left: ' + pinPosition.x + 'px;';
-      addressField.value = pinPosition.x + ',' + pinPosition.y;
+      addressField.value = pinPosition.x + ', ' + pinPosition.y;
       if (map.classList.contains('map--faded')) {
-        window.utils.activateMap(map, adForm, 'map--faded', 'ad-form--disabled', inputsAndSelects);
+        window.utils.activateMap();
         window.recieveData(onSuccess, window.utils.onError);
       }
       map.removeEventListener('mousemove', onMouseMove);
