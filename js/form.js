@@ -1,10 +1,8 @@
 'use strict';
 
 (function () {
-  var map = document.querySelector('.map');
-  var mapPin = map.querySelector('.map__pin');
+  var mapPin = document.querySelector('.map__pin');
   var adForm = document.querySelector('.ad-form');
-  var allInputsAndSelects = document.querySelectorAll('input, select');
   var addressField = adForm.querySelector('#address');
   var priceField = adForm.querySelector('#price');
   var typeField = adForm.querySelector('#type');
@@ -13,6 +11,7 @@
   var rooms = adForm.querySelector('#room_number');
   var roomsFields = Array.from(rooms.querySelectorAll('option'));
   var capacityFields = Array.from(adForm.querySelectorAll('#capacity option'));
+  var resetButton = adForm.querySelector('.ad-form__reset');
   var accomodationTypes = ['palace', 'flat', 'house', 'bungalo'];
   var accommodationPrices = [10000, 1000, 5000, 0];
   var RoomsToGuests = {
@@ -32,7 +31,12 @@
     PIN_X: document.querySelector('.map__pin--main').offsetLeft
   };
 
-  addressField.value = (PinInitialPosition.PIN_X - (PinSize.PIN_WIDTH * 0.5)) + ',' + (PinInitialPosition.PIN_Y - PinSize.PIN_HEIGHT);
+  var setPinInitPosition = function () {
+    addressField.value = (PinInitialPosition.PIN_X - (PinSize.PIN_WIDTH * 0.5)) + ', ' + (PinInitialPosition.PIN_Y - (PinSize.PIN_HEIGHT * 0.5));
+    mapPin.style = 'top: ' + PinInitialPosition.PIN_Y + 'px;' + 'left: ' + PinInitialPosition.PIN_X + 'px;';
+  };
+
+  setPinInitPosition();
 
   var onAccommodationTypeClick = function () {
     var checkedType = typeField.querySelector('option:checked');
@@ -69,18 +73,14 @@
   });
 
   var onSuccess = function () {
-    var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-    var card = document.querySelector('.map__card');
-    if (card) {
-      card.remove();
-    }
     window.utils.createSuccessMessage();
-    addressField.value = PinInitialPosition.PIN_X + ',' + PinInitialPosition.PIN_Y;
-    window.utils.deactivateMap(map, adForm, 'map--faded', 'ad-form--disabled', allInputsAndSelects);
-    pins.forEach(function (it) {
-      it.remove();
-    });
-    mapPin.style = 'top: ' + PinInitialPosition.PIN_Y + 'px;' + 'left: ' + PinInitialPosition.PIN_X + 'px;';
+    window.utils.deactivateMap();
+    setPinInitPosition();
+  };
+
+  var onResetClick = function () {
+    window.utils.deactivateMap();
+    setPinInitPosition();
   };
 
   departureField.addEventListener('click', function () {
@@ -92,5 +92,9 @@
   adForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
     window.sendData(onSuccess, window.utils.onError);
+  });
+  resetButton.addEventListener('click', function (evt) {
+    evt.preventDefault();
+    onResetClick();
   });
 })();
