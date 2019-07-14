@@ -55,8 +55,22 @@ window.utils = (function () {
       var allInputsAndSelects = document.querySelectorAll('input, select');
       var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
       var card = document.querySelector('.map__card');
+      var avatarPreview = document.querySelector('.ad-form-header__preview img');
+      var photoDivs = adForm.querySelectorAll('.ad-form__photo');
+
+      var AVATAR_DEFAULT = 'img/muffin-grey.svg';
+
       if (card) {
         card.remove();
+      }
+      avatarPreview.src = AVATAR_DEFAULT;
+      for (var i = 1; i < photoDivs.length; i++) {
+        photoDivs[i].remove();
+      }
+      if (photoDivs[0].childNodes) {
+        photoDivs[0].childNodes.forEach(function (it) {
+          it.remove();
+        });
       }
       map.classList.add('map--faded');
       adForm.reset();
@@ -117,9 +131,8 @@ window.utils = (function () {
       ads = data.filter(function (it) {
         if (checkedType.value !== 'any') {
           return checkedType.value === it.offer.type;
-        } else {
-          return it;
         }
+        return it;
       })
       .filter(function (it) {
         if (checkedPrice.value === 'low') {
@@ -134,16 +147,14 @@ window.utils = (function () {
       .filter(function (it) {
         if (checkedRoom.value !== 'any') {
           return +checkedRoom.value === it.offer.rooms;
-        } else {
-          return it;
         }
+        return it;
       })
       .filter(function (it) {
         if (checkedGuest.value !== 'any') {
           return +checkedGuest.value === it.offer.guests;
-        } else {
-          return it;
         }
+        return it;
       })
       .filter(function (it) {
         for (var i = 0; i < checkedFeatures.length; i++) {
@@ -242,6 +253,54 @@ window.utils = (function () {
       window.addEventListener('click', function () {
         elem.remove();
       });
+    },
+    preventDefaults: function (evt) {
+      evt.preventDefault();
+      evt.stopPropagation();
+    },
+    onAvatarUpload: function (file, filePreview) {
+      var fileType = file.type;
+
+      if (fileType.startsWith('image')) {
+        var fileReader = new FileReader();
+
+        fileReader.addEventListener('load', function () {
+          filePreview.src = fileReader.result;
+        });
+
+        fileReader.readAsDataURL(file);
+      }
+    },
+    onAdPhotoUpload: function (files, container, block) {
+      for (var i = 0; i < files.length; i++) {
+        var item = files[i];
+        var fileType = item.type;
+
+        if (!fileType.startsWith('image')) {
+          continue;
+        }
+        var img = document.createElement('img');
+        img.width = '70';
+        img.height = '70';
+        img.file = item;
+        var fileReader = new FileReader();
+
+        fileReader.addEventListener('load', (function (aImg) {
+          return function (loadEvt) {
+            aImg.src = loadEvt.target.result;
+          };
+        })(img));
+
+        fileReader.readAsDataURL(item);
+        if (i >= 1) {
+          var div = document.createElement('div');
+          div.classList.add('ad-form__photo');
+          div.appendChild(img);
+          container.appendChild(div);
+        } else {
+          block.appendChild(img);
+        }
+      }
     }
   };
 })();
