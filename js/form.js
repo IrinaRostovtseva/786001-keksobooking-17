@@ -15,10 +15,10 @@
   var accomodationTypes = ['palace', 'flat', 'house', 'bungalo'];
   var accommodationPrices = [10000, 1000, 5000, 0];
   var RoomsToGuests = {
-    1: '1',
-    2: '2',
-    3: '3',
-    100: '0'
+    '1': '1',
+    '2': '2',
+    '3': '3',
+    '100': '0'
   };
 
   var PinSize = {
