@@ -20,7 +20,7 @@
   };
   window.sendData = function (onSuccess, onError) {
     var url = 'https://js.dump.academy/keksobooking';
-    var form = document.querySelector('.ad-form');
+    var formElement = document.querySelector('.ad-form');
     var xhr = new XMLHttpRequest();
     xhr.open('POST', url);
     xhr.addEventListener('load', function () {
@@ -33,6 +33,6 @@
     xhr.addEventListener('error', function () {
       onError('Ошибка подключения');
     });
-    xhr.send(new FormData(form));
+    xhr.send(new FormData(formElement));
   };
 })();

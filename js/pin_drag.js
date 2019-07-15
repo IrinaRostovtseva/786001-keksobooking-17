@@ -1,11 +1,11 @@
 'use strict';
 
 (function () {
-  var map = document.querySelector('.map');
-  var mapPin = map.querySelector('.map__pin--main');
-  var mapPinsBlock = map.querySelector('.map__pins');
-  var adForm = document.querySelector('.ad-form');
-  var addressField = adForm.querySelector('#address');
+  var mapElement = document.querySelector('.map');
+  var mapPinElement = mapElement.querySelector('.map__pin--main');
+  var mapPinsBlockElement = mapElement.querySelector('.map__pins');
+  var adFormElement = document.querySelector('.ad-form');
+  var addressFieldElement = adFormElement.querySelector('#address');
   var MapPinCoordinate = function (x, y) {
     this.x = x;
     this.y = y;
@@ -22,34 +22,34 @@
   var onSuccess = function (data) {
     var slicedData = data.slice(0, 5);
     window.utils.createPin(slicedData, window.fragment);
-    mapPinsBlock.appendChild(window.fragment);
+    mapPinsBlockElement.appendChild(window.fragment);
   };
 
-  mapPin.addEventListener('mousedown', function (evt) {
+  mapPinElement.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
-    var pinPosition = new MapPinCoordinate(evt.pageX - PinSize.PIN_WIDTH * 0.5 - map.offsetLeft, window.utils.compareNumberWithLimits(evt.pageY - PinSize.PIN_HEIGHT, Limit.TOP, Limit.BOTTOM));
+    var pinPosition = new MapPinCoordinate(evt.pageX - PinSize.PIN_WIDTH * 0.5 - mapElement.offsetLeft, window.utils.compareNumberWithLimits(evt.pageY - PinSize.PIN_HEIGHT, Limit.TOP, Limit.BOTTOM));
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
-      pinPosition = new MapPinCoordinate(moveEvt.pageX - PinSize.PIN_WIDTH * 0.5 - map.offsetLeft, window.utils.compareNumberWithLimits(moveEvt.pageY - PinSize.PIN_HEIGHT, Limit.TOP, Limit.BOTTOM));
-      if (map.classList.contains('map--faded')) {
+      pinPosition = new MapPinCoordinate(moveEvt.pageX - PinSize.PIN_WIDTH * 0.5 - mapElement.offsetLeft, window.utils.compareNumberWithLimits(moveEvt.pageY - PinSize.PIN_HEIGHT, Limit.TOP, Limit.BOTTOM));
+      if (mapElement.classList.contains('map--faded')) {
         window.utils.activateMap();
         window.recieveData(onSuccess, window.utils.onError);
       }
-      mapPin.style = 'top: ' + pinPosition.y + 'px;' + 'left: ' + pinPosition.x + 'px;';
-      addressField.value = pinPosition.x + ', ' + pinPosition.y;
+      mapPinElement.style = 'top: ' + pinPosition.y + 'px;' + 'left: ' + pinPosition.x + 'px;';
+      addressFieldElement.value = pinPosition.x + ', ' + pinPosition.y;
     };
 
     var onMouseUp = function () {
-      mapPin.style = 'top: ' + pinPosition.y + 'px;' + 'left: ' + pinPosition.x + 'px;';
-      addressField.value = pinPosition.x + ', ' + pinPosition.y;
-      if (map.classList.contains('map--faded')) {
+      mapPinElement.style = 'top: ' + pinPosition.y + 'px;' + 'left: ' + pinPosition.x + 'px;';
+      addressFieldElement.value = pinPosition.x + ', ' + pinPosition.y;
+      if (mapElement.classList.contains('map--faded')) {
         window.utils.activateMap();
         window.recieveData(onSuccess, window.utils.onError);
       }
-      map.removeEventListener('mousemove', onMouseMove);
-      map.removeEventListener('mouseup', onMouseUp);
+      mapElement.removeEventListener('mousemove', onMouseMove);
+      mapElement.removeEventListener('mouseup', onMouseUp);
     };
-    map.addEventListener('mousemove', onMouseMove);
-    map.addEventListener('mouseup', onMouseUp);
+    mapElement.addEventListener('mousemove', onMouseMove);
+    mapElement.addEventListener('mouseup', onMouseUp);
   });
 })();

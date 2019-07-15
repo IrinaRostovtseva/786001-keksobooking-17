@@ -1,17 +1,17 @@
 'use strict';
 
 (function () {
-  var mapPin = document.querySelector('.map__pin');
-  var adForm = document.querySelector('.ad-form');
-  var addressField = adForm.querySelector('#address');
-  var priceField = adForm.querySelector('#price');
-  var typeField = adForm.querySelector('#type');
-  var arriveField = adForm.querySelector('#timein');
-  var departureField = adForm.querySelector('#timeout');
-  var rooms = adForm.querySelector('#room_number');
-  var roomsFields = Array.from(rooms.querySelectorAll('option'));
-  var capacityFields = Array.from(adForm.querySelectorAll('#capacity option'));
-  var resetButton = adForm.querySelector('.ad-form__reset');
+  var mapPinElement = document.querySelector('.map__pin');
+  var adFormElement = document.querySelector('.ad-form');
+  var addressFieldElement = adFormElement.querySelector('#address');
+  var priceFieldElement = adFormElement.querySelector('#price');
+  var typeFieldElement = adFormElement.querySelector('#type');
+  var arriveFieldElement = adFormElement.querySelector('#timein');
+  var departureFieldElement = adFormElement.querySelector('#timeout');
+  var roomsElement = adFormElement.querySelector('#room_number');
+  var roomsOptionElements = Array.from(roomsElement.querySelectorAll('option'));
+  var capacityOptionElements = Array.from(adFormElement.querySelectorAll('#capacity option'));
+  var resetButtonElement = adFormElement.querySelector('.ad-form__reset');
   var accomodationTypes = ['palace', 'flat', 'house', 'bungalo'];
   var accommodationPrices = [10000, 1000, 5000, 0];
   var RoomsToGuests = {
@@ -32,34 +32,34 @@
   };
 
   var setPinInitPosition = function () {
-    addressField.value = (PinInitialPosition.PIN_X - (PinSize.PIN_WIDTH * 0.5)) + ', ' + (PinInitialPosition.PIN_Y - (PinSize.PIN_HEIGHT * 0.5));
-    mapPin.style = 'top: ' + PinInitialPosition.PIN_Y + 'px;' + 'left: ' + PinInitialPosition.PIN_X + 'px;';
+    addressFieldElement.value = (PinInitialPosition.PIN_X - (PinSize.PIN_WIDTH * 0.5)) + ', ' + (PinInitialPosition.PIN_Y - (PinSize.PIN_HEIGHT * 0.5));
+    mapPinElement.style = 'top: ' + PinInitialPosition.PIN_Y + 'px;' + 'left: ' + PinInitialPosition.PIN_X + 'px;';
   };
 
   setPinInitPosition();
 
   var onAccommodationTypeClick = function () {
-    var checkedType = typeField.querySelector('option:checked');
+    var checkedTypeElement = typeFieldElement.querySelector('option:checked');
     for (var i = 0; i < accomodationTypes.length; i++) {
-      if (checkedType.value === accomodationTypes[i]) {
-        priceField.min = accommodationPrices[i];
-        priceField.placeholder = '' + accommodationPrices[i];
+      if (checkedTypeElement.value === accomodationTypes[i]) {
+        priceFieldElement.min = accommodationPrices[i];
+        priceFieldElement.placeholder = '' + accommodationPrices[i];
       }
     }
   };
   var onRoomsFieldClick = function () {
-    var checkedRoomsValue = rooms.querySelector('option:checked').value;
+    var checkedRoomsValue = roomsElement.querySelector('option:checked').value;
 
-    roomsFields.forEach(function () {
-      capacityFields.forEach(function (it) {
+    roomsOptionElements.forEach(function () {
+      capacityOptionElements.forEach(function (it) {
         it.setAttribute('disabled', 'disabled');
         it.removeAttribute('selected');
       });
-      var abledGuestFields = capacityFields.filter(function (it) {
+      var abledGuestFields = capacityOptionElements.filter(function (it) {
         return it.value <= RoomsToGuests[checkedRoomsValue] && it.value > 0;
       });
       if (checkedRoomsValue === '100') {
-        abledGuestFields = capacityFields.filter(function (it) {
+        abledGuestFields = capacityOptionElements.filter(function (it) {
           return it.value === RoomsToGuests[checkedRoomsValue];
         });
       }
@@ -67,9 +67,9 @@
       abledGuestFields[0].setAttribute('selected', 'selected');
     });
   };
-  typeField.addEventListener('click', onAccommodationTypeClick);
-  arriveField.addEventListener('click', function () {
-    window.utils.synchronizeTwoFields(arriveField, departureField);
+  typeFieldElement.addEventListener('click', onAccommodationTypeClick);
+  arriveFieldElement.addEventListener('click', function () {
+    window.utils.synchronizeTwoFields(arriveFieldElement, departureFieldElement);
   });
 
   var onSuccess = function () {
@@ -83,17 +83,17 @@
     setPinInitPosition();
   };
 
-  departureField.addEventListener('click', function () {
-    window.utils.synchronizeTwoFields(departureField, arriveField);
+  departureFieldElement.addEventListener('click', function () {
+    window.utils.synchronizeTwoFields(departureFieldElement, arriveFieldElement);
   });
 
-  rooms.addEventListener('click', onRoomsFieldClick);
+  roomsElement.addEventListener('click', onRoomsFieldClick);
 
-  adForm.addEventListener('submit', function (evt) {
+  adFormElement.addEventListener('submit', function (evt) {
     evt.preventDefault();
     window.sendData(onSuccess, window.utils.onError);
   });
-  resetButton.addEventListener('click', function (evt) {
+  resetButtonElement.addEventListener('click', function (evt) {
     evt.preventDefault();
     onResetClick();
   });
